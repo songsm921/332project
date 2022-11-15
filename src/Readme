@@ -1,0 +1,4 @@
+Make input file and src file in same folder
+In terminal:
+scalac Worker.scala
+scala FileIO filename1 filename2 .. filenameN
