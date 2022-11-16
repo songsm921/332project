@@ -63,7 +63,7 @@ object fileIO{
       fileCount = fileCount + 1
       new PrintWriter(filename + (fileCount).toString) {
         while (!lines.isEmpty) {
-          write(lines.remove(0)+"\n")
+          write(lines.remove(0)+"\r\n")
         }
         close
       }
@@ -76,7 +76,8 @@ object fileIO{
           fileCount = fileCount + 1
           new PrintWriter(filename + (fileCount).toString){
             while(!lines.isEmpty){
-              write(lines.remove(0)+"\n")
+              write(lines.remove(0)+"\r\n")
+
             }
             close
           }
@@ -87,7 +88,7 @@ object fileIO{
         fileCount = fileCount + 1
         new PrintWriter(filename + fileCount){
           while(!lines.isEmpty){
-            write(lines.remove(0)+"\n")
+            write(lines.remove(0)+"\r\n")
           }
           close
         }
