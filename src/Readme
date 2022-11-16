@@ -2,3 +2,17 @@ Make input file and src file in same folder
 In terminal:
 scalac Worker.scala
 scala FileIO filename1 filename2 .. filenameN
+*TroubleShooting*
+1. scala.jdk.collections -> jdk is not a member in scala... <Compile error> (Solved)
+  install sbt 1.7.1, jdk 11, scala 2.13.0
+  jdk 11 : sudo apt install openjdk-11-jdk
+  sbt : curl -s "https://get.sdkman.io" | bash
+        source "$HOME/.sdkman/bin/sdkman-init.sh"
+        sdk version (for check whether sdkman succesfully installed)
+        sdk list sbt (check list of sbt version)
+        sdk install sbt 1.7.1
+        sdk default sbt 1.7.1 (set sbt default version to 1.7.1)
+  scala 2.13.0 : sdk list scala (check scala 2.13 is available)
+                 sdk install scala 2.13.0
+                 sdk default scala 2.13.0
+>> scala -> check version 2.13 // scalac --version -> check version 2.13
