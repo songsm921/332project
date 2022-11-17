@@ -1,7 +1,7 @@
 Make input file and src file in same folder
 In terminal:
 scalac Worker.scala
-scala FileIO filename1 filename2 .. filenameN
+scala Worker IP -I path1 path2 ... pathN -O outputPath
 *TroubleShooting*
 1. scala.jdk.collections -> jdk is not a member in scala... <Compile error> (Solved)
   install sbt 1.7.1, jdk 11, scala 2.13.0
