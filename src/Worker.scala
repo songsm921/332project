@@ -12,6 +12,7 @@ object Worker{
     private val splitSizeMB = 32
     private val sizePerLineMB = 0.0001 // 10KB
     private val fileNamePrefix = "partition"
+    def getFileCount(): Int = fileCount
     def splitFile(path: String, sizeMB: Double = splitSizeMB): Unit = {
       val lineCount = Source.fromFile(path).getLines().size
       val rawFileSize = lineCount * sizePerLineMB
@@ -57,10 +58,23 @@ object Worker{
       }
     }
   }
+  class Sort{
+    def sortFile(path: String) = {
+      val lines = Source.fromFile(path).getLines().map(_.splitAt(10)).toList
+      val sortedLines = lines.sortBy(_._1)
+      new PrintWriter(path) {
+        for (line <- sortedLines) {
+          write(line._1 + line._2 + "\r\n")
+        }
+        close
+      }
+    }
+  }
 
   def main(args: Array[String]) : Unit = {
     val argList = ListBuffer(args: _ *)
     val instFragment = new Fragmentation()
+    val instSort = new Sort()
     val masterIP = argList.remove(0)
     argList.remove(0)
     while(argList.head != "-O"){
@@ -71,6 +85,10 @@ object Worker{
     val instIO = new IO(masterIP,outputPath)
     print(instIO.getMasterIP())
     print(instIO.getOuputPath())
+    val fileCount = instFragment.getFileCount()
+    for(i <- 1 to fileCount){
+      instSort.sortFile("partition." + i.toString)
+    }
   }
 
 }
