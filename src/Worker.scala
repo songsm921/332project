@@ -82,14 +82,25 @@ object Worker{
 
     }
   }
-  class Patitioning{
+  class Partitioning{
+    private val instWriter = ListBuffer[PrintWriter]()
+    def createWriterForTest(fileCount : Int) = {
+      for (i <- 1 to fileCount) {
+        instWriter.append(new PrintWriter("toMachine." + i.toString))
+      }
+    }
+    def closeInstWriter() = {
+      for (writer <- instWriter) {
+        writer.close
+      }
+    }
     def partitionEachLine(path: String, rangeList: ListBuffer[(String,String)]) = {
       val lines = Source.fromFile(path).getLines().map(_.splitAt(10)).toList
       val partitionedLines : ListBuffer[(Int, String)] = ListBuffer()
       for (line <- lines) {
         var i = 0
         while (i < rangeList.length) {
-          if (line._1 >= rangeList(i)._1 && line._1 <= rangeList(i)._2) {
+          if (line._1 >= rangeList(i)._1 && line._1 < rangeList(i)._2) {
             partitionedLines.append((i, line._1 + line._2))
           }
           i = i + 1
@@ -101,13 +112,7 @@ object Worker{
       }
       printInst.close*/
       for(i <- 0 until rangeList.length) {
-        val printInst = new PrintWriter("toMachine" + "." + (i + 1).toString)
-        for (line <- partitionedLines) {
-          if (line._1 == i) {
-            printInst.write(line._2 + "\r\n")
-          }
-        }
-        printInst.close
+       instWriter(i).append(partitionedLines.filter(_._1 == i).map(_._2 + "\r\n").mkString)
       }
     }
     }
@@ -150,10 +155,12 @@ object Worker{
     for(ele <- rangeEachMachine){
       print(ele._1 + " " + ele._2 + "\n")
     }
-    val instPartition = new Patitioning()
+    val instPartition = new Partitioning()
+    instPartition.createWriterForTest(countWorker)
     for(i <- 1 to fileCount){
       instPartition.partitionEachLine("partition." + i.toString,rangeEachMachine)
     }
+    instPartition.closeInstWriter()
   }
 
 }
