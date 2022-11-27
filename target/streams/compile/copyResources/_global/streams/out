@@ -1,0 +1,4 @@
+[0m[[0m[0mdebug[0m] [0m[0mCopy resource mappings: [0m
+[0m[[0m[0mdebug[0m] [0m[0m	(/home/james/Desktop/grpc_test/src/main/protobuf/sorting.proto,/home/james/Desktop/grpc_test/target/scala-2.13/classes/sorting.proto)[0m
+[0m[[0m[0mdebug[0m] [0m[0m	(/home/james/Desktop/grpc_test/src/main/protobuf/fragment.proto,/home/james/Desktop/grpc_test/target/scala-2.13/classes/fragment.proto)[0m
+[0m[[0m[0mdebug[0m] [0m[0m	(/home/james/Desktop/grpc_test/src/main/resources/log4j2.xml,/home/james/Desktop/grpc_test/target/scala-2.13/classes/log4j2.xml)[0m

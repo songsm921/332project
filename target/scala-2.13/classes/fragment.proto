@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package fragment;
+
+// The greeting service definition.
+service FragService {
+  // Sends a greeting
+  rpc SayHello (FragRequest) returns (FragReply) {}
+}
+
+// The request message containing the user's name.
+message FragRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message FragReply {
+  string message = 1;
+}

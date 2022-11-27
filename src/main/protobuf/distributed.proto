@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package distributed;
+
+
+service Distributed{
+  rpc getPartition (PartitionRequest) returns (PartitionResponse) {}
+  rpc requestData (DataRequest) returns (DataResponse) {}
+  rpc sendData (DataRequest) returns (DataResponse) {}
+}
+
+message PartitionRequest {
+  Bytes sampling = 1;
+  int32 sizeOfData = 2;
+}
+
+message PartitionResponse {
+  int32 machineNumber = 1;
+  // i th standard will be the i th partition
+  repeated Bytes partitionStandard = 2;
+}
+
+message DataRequest {
+  int32 machineNumber = 1;
+  int32 partitionNumber = 2;
+  int32 sizeOfData = 3;
+  repeated Bytes data = 4;
+}
