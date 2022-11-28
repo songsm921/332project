@@ -25,7 +25,7 @@ object Master{
     val server = new Master(ExecutionContext.global, numClient.get.toInt)
     server.start()
     server.printEndpoint()
-    server.blockUntilShutdown()
+    //server.blockUntilShutdown()
   }
 
   private val port = 50051

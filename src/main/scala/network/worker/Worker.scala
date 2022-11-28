@@ -50,7 +50,7 @@ class Worker private(
     channel.shutdown.awaitTermination(5, TimeUnit.SECONDS)
   }
 
-  def SayHello(): String = {
+  def SayHello(): Unit = {
     val request = FragRequest(name = getMyIpAddress)
     try {
       val response = blockingStub.sayHello(request)
@@ -60,6 +60,6 @@ class Worker private(
       case e: StatusRuntimeException =>
         logger.warn(s"RPC failed: ${e.getStatus}")
     }
-    response
+    //response
   }
 }
