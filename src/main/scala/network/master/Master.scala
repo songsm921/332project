@@ -15,11 +15,12 @@ import sorting.sorting.
   SortRequest,
   SortReply}
 
-object Master {
+object Master{
   def main(args: Array[String]): Unit = {
-    var work = 0
     val numClient = args.headOption
-    if (numClient.isEmpty) return
+    if (numClient.isEmpty) {
+      return
+    }
 
     val server = new Master(ExecutionContext.global, numClient.get.toInt)
     server.start()
@@ -40,6 +41,7 @@ class Master(executionContext: ExecutionContext, val numClient: Int) extends Log
   private val messageLatch: CountDownLatch = new CountDownLatch(numClient)
   var slaves: Vector[WorkerClient] = Vector.empty
   var msgStacker = ""
+  var temp = 1;
 
   private def start(): Unit = {
     server = ServerBuilder.forPort(Master.port).addService(FragServiceGrpc.bindService(new FragImpl, executionContext)).build.start
@@ -66,12 +68,13 @@ class Master(executionContext: ExecutionContext, val numClient: Int) extends Log
 
   private def blockUntilShutdown(): Unit = {
     if (server != null) {
-      server.awaitTermination(30, java.util.concurrent.TimeUnit.SECONDS)
+      server.awaitTermination(450, java.util.concurrent.TimeUnit.SECONDS)
     }
   }
 
   private def addNewSlave(ipAddress: String): Unit = {
     this.synchronized {
+      slaves foreach { slave => if (slave.ip == ipAddress) return }
       this.slaves = this.slaves :+ new WorkerClient(this.slaves.length, ipAddress)
       if (this.slaves.length == this.numClient) printSlaveIpAddresses()
     }
@@ -85,7 +88,7 @@ class Master(executionContext: ExecutionContext, val numClient: Int) extends Log
     override def sayHello(req: FragRequest) = {
       logger.info("sayHello from " + req.name)
       messageLatch.countDown()
-      msgStacker += f"add ${req.name} "
+      msgStacker += f"${temp}: add ${req.name} "
       messageLatch.await()
       clientLatch.countDown()
       addNewSlave(req.name)
