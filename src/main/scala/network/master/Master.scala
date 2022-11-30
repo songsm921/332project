@@ -6,14 +6,11 @@ import java.util.concurrent.CountDownLatch
 import scala.concurrent.{ExecutionContext, Future}
 
 import network.common.Util.getMyIpAddress
-import fragment.fragment.
-{FragServiceGrpc,
-  FragRequest,
-  FragReply}
-import sorting.sorting.
-{SortServiceGrpc,
-  SortRequest,
-  SortReply}
+import distributed.distributed.{
+  DistributedGrpc, ConnectionCheckRequest, ConnectionCheckResponse,
+  DoneRequest, DoneResponse, IsSendingDone, PartitionedDataRequest, PartitionedData, PartitionedDataResponse,
+  SampleRequest, SampleResponse
+}
 
 object Master{
   def main(args: Array[String]): Unit = {
@@ -38,13 +35,10 @@ class WorkerClient(val id: Int, val ip: String) {
 class Master(executionContext: ExecutionContext, val numClient: Int) extends Logging { self =>
   private[this] var server: Server = null
   private val clientLatch: CountDownLatch = new CountDownLatch(numClient)
-  private val messageLatch: CountDownLatch = new CountDownLatch(numClient)
   var slaves: Vector[WorkerClient] = Vector.empty
-  var msgStacker = ""
-  var temp = 1;
 
   private def start(): Unit = {
-    server = ServerBuilder.forPort(Master.port).addService(FragServiceGrpc.bindService(new FragImpl, executionContext)).build.start
+    server = ServerBuilder.forPort(Master.port).addService(DistributedGrpc.bindService(new DistributedImpl, executionContext)).build.start
     //Add Service Implementation here
     //server = ServerBuilder.forPort(Master.port).addService(FragServiceGrpc.bindService(new FragImpl, executionContext)).build.addService(SortServiceGrpc.bindService(new SortImpl, executionContext)).build.start
     logger.info("Server numClient: " + self.numClient)
@@ -72,11 +66,12 @@ class Master(executionContext: ExecutionContext, val numClient: Int) extends Log
     }
   }
 
-  private def addNewSlave(ipAddress: String): Unit = {
+  private def addNewSlave(ipAddress: String): Int = {
     this.synchronized {
-      slaves foreach { slave => if (slave.ip == ipAddress) return }
+      slaves foreach{ slave => if (slave.ip == ipAddress) return slave.id }
       this.slaves = this.slaves :+ new WorkerClient(this.slaves.length, ipAddress)
       if (this.slaves.length == this.numClient) printSlaveIpAddresses()
+      slaves.last.id
     }
   }
 
@@ -84,29 +79,24 @@ class Master(executionContext: ExecutionContext, val numClient: Int) extends Log
     System.out.println(this.slaves.mkString(", "))
   }
 
-  private class FragImpl extends FragServiceGrpc.FragService {
-    override def sayHello(req: FragRequest) = {
-      logger.info("sayHello from " + req.name)
-      msgStacker += f"${temp}: add ${req.name} "
-//      messageLatch.countDown()
-//      messageLatch.await()
-      clientLatch.countDown()
-      addNewSlave(req.name)
+  private class DistributedImpl extends DistributedGrpc.Distributed {
+    override def connectionCheck(req: ConnectionCheckRequest) = {
+      logger.info("sayHello from " + req.ipAddress)
+      val _machineID = addNewSlave(req.ipAddress)
       clientLatch.await()
-      val reply = FragReply(message = msgStacker)
+      val reply = ConnectionCheckResponse(machineID = _machineID)
       Future.successful(reply)
     }
-  }
 
-  private class SortImpl extends SortServiceGrpc.SortService {
-    override def sortSayHello(req: SortRequest) = {
-      logger.info("sayHello from " + req.name)
-      clientLatch.countDown()
-      addNewSlave(req.name)
-      clientLatch.await()
-      val reply = SortReply(message = "Hello")
-      Future.successful(reply)
-    }
+    override def getSampleRange(request: SampleRequest): Future[SampleResponse] = ???
+
+    override def requestPartitionedData(request: PartitionedDataRequest): Future[PartitionedDataResponse] = ???
+
+    override def sendPartitionedData(request: PartitionedData): Future[IsSendingDone] = ???
+
+    override def taskDoneReport(request: DoneRequest): Future[DoneResponse] = ???
+
+
   }
 
 }
