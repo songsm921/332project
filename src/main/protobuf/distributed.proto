@@ -4,29 +4,63 @@ package distributed;
 
 
 service Distributed{
-  rpc getPartition (PartitionRequest) returns (PartitionResponse) {}
-  rpc requestData (DataRequest) returns (DataResponse) {}
-  rpc sendData (DataRequest) returns (DataResponse) {}
+  rpc connectionCheck(ConnectionCheckRequest) returns (ConnectionCheckResponse) {}
+  rpc getSampleRange (SampleRequest) returns (SampleResponse) {}
+
+  rpc requestPartitionedData (PartitionedDataRequest) returns (PartitionedDataResponse) {}
+  rpc sendPartitionedData (PartitionedData) returns (IsSendingDone) {}
+
+  rpc taskDoneReport (DoneRequest) returns (DoneResponse) {}
 }
 
-message PartitionRequest {
-  bytes sampling = 1;
-  int32 sizeOfData = 2;
+//rpc ConnectionCheck
+message ConnectionCheckRequest {
+  string ipAddress = 1;
 }
 
-message PartitionResponse {
+message ConnectionCheckResponse {
+  int32 machineID = 1;
+}
+
+//rpc getSampleRange
+message SampleRequest {
+  int32 sampleSize = 1;
+  repeated bytes sampleDataSequence = 2;
+}
+
+message SampleResponse {
+  repeated bytes rangeSequence = 1;
+}
+
+//rpc requestPartitionedData
+ message PartitionedDataRequest {
   int32 machineNumber = 1;
-  // i th standard will be the i th partition
-  repeated bytes partitionStandard = 2;
+
+}
+message PartitionedDataResponse {
+  int32 sentDataSize = 1;
+  int32 totalDataSize = 2;
+  repeated bytes data = 3;
 }
 
-message DataRequest {
-  int32 machineNumber = 1;
-  int32 partitionNumber = 2;
-  int32 sizeOfData = 3;
+//rpc sendPartitionedData
+
+message PartitionedData{
+  int32 partitionNumber = 1;
+  int32 sentDataSize = 2;
+  int32 totalDataSize = 3;
   repeated bytes data = 4;
 }
 
-message DataResponse{
-  int32 name = 1; // To be changed
+message IsSendingDone{
+  bool isSendingDone = 1;
+}
+
+//rpc taskDoneReport
+message DoneRequest {
+  int32 machineID = 1;
+}
+
+message DoneResponse {
+  bool isDone = 1;
 }

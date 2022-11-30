@@ -25,7 +25,7 @@ object Master{
     val server = new Master(ExecutionContext.global, numClient.get.toInt)
     server.start()
     server.printEndpoint()
-    //server.blockUntilShutdown()
+    server.blockUntilShutdown()
   }
 
   private val port = 50051
@@ -87,9 +87,9 @@ class Master(executionContext: ExecutionContext, val numClient: Int) extends Log
   private class FragImpl extends FragServiceGrpc.FragService {
     override def sayHello(req: FragRequest) = {
       logger.info("sayHello from " + req.name)
-      messageLatch.countDown()
       msgStacker += f"${temp}: add ${req.name} "
-      messageLatch.await()
+//      messageLatch.countDown()
+//      messageLatch.await()
       clientLatch.countDown()
       addNewSlave(req.name)
       clientLatch.await()

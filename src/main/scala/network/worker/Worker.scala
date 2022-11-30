@@ -3,7 +3,7 @@ package network.worker
 import org.apache.logging.log4j.scala.Logging
 import io.grpc.{ManagedChannel, ManagedChannelBuilder, StatusRuntimeException}
 import java.util.concurrent.TimeUnit
-
+import scala.concurrent.{Future, Promise}
 import network.common.Util.getMyIpAddress
 import network.common.Phase
 import fragment.fragment.FragServiceGrpc.FragServiceBlockingStub
@@ -12,13 +12,15 @@ import sorting.sorting.SortServiceGrpc.SortServiceBlockingStub
 import fragment.fragment.{FragServiceGrpc,FragRequest,FragReply}
 
 import sorting.sorting.{SortServiceGrpc, SortRequest, SortReply}
+import scala.concurrent.Promise
 
 
 object Worker {
   def apply(host: String, port: Int): Worker = {
     val channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext().asInstanceOf[ManagedChannelBuilder[_]].build
-    val blockingStub = FragServiceGrpc.blockingStub(channel)
-    new Worker(channel, blockingStub)
+//    val blockingStub = FragServiceGrpc.blockingStub(channel)
+    val stub = FragServiceGrpc.blockingStub(channel)
+    new Worker(channel, stub)
   }
 
   def main(args: Array[String]): Unit = {

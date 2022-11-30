@@ -21,3 +21,13 @@ object Phase extends Enumeration {
   val BALANCING = Value(5)
   val TERMINATING = Value(6)
 }
+
+object workerPhase extends Enumeration{
+  val INITIAL = Value(0)
+  val FRAGMENTATION = Value(1)
+  val SORTING = Value(2)
+  val SAMPLING = Value(3)
+  val MERGING = Value(4)
+  val BALANCING = Value(5)
+  val TERMINATING = Value(6)
+}
