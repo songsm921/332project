@@ -1,0 +1,7 @@
+global-logging
+protobuf_external
+streams
+task-temp-directory
+
+scala-2.13/update
+scala-2.12
