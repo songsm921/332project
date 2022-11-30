@@ -1,6 +1,0 @@
-[0m[[0m[0mdebug[0m] [0m[0mInvalidating cache (input changed)[0m
-[0m[[0m[0minfo[0m] [0m[0mCompiling 3 protobuf files to /home/james/Desktop/dev-332project/target/scala-2.13/src_managed/main/scalapb[0m
-[0m[[0m[0mdebug[0m] [0m[0mprotoc options:[0m
-[0m[[0m[0mdebug[0m] [0m[0mCompiling schema /home/james/Desktop/dev-332project/src/main/protobuf/distributed.proto[0m
-[0m[[0m[0mdebug[0m] [0m[0mCompiling schema /home/james/Desktop/dev-332project/src/main/protobuf/sorting.proto[0m
-[0m[[0m[0mdebug[0m] [0m[0mCompiling schema /home/james/Desktop/dev-332project/src/main/protobuf/fragment.proto[0m

@@ -1,5 +1,0 @@
-[0m[[0m[0mdebug[0m] [0m[0mCopy resource mappings: [0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/home/james/Desktop/dev-332project/src/main/protobuf/distributed.proto,/home/james/Desktop/dev-332project/target/scala-2.13/classes/distributed.proto)[0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/home/james/Desktop/dev-332project/src/main/protobuf/sorting.proto,/home/james/Desktop/dev-332project/target/scala-2.13/classes/sorting.proto)[0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/home/james/Desktop/dev-332project/src/main/protobuf/fragment.proto,/home/james/Desktop/dev-332project/target/scala-2.13/classes/fragment.proto)[0m
-[0m[[0m[0mdebug[0m] [0m[0m	(/home/james/Desktop/dev-332project/src/main/resources/log4j2.xml,/home/james/Desktop/dev-332project/target/scala-2.13/classes/log4j2.xml)[0m

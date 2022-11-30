@@ -2,5 +2,6 @@
 /gensort
 .DS_Store
 
+target
 ./target/
 ./target/global-logging/
