@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package shuffling;
+
+service Shuffling{
+  rpc shuffle(ShuffleRequest) returns (ShuffleResponse) {}
+  rpc shutdownWorkerServer(ShutdownWorkerServerRequest) returns (ShutdownWorkerServerResponse) {}
+}
+
+message ShuffleRequest {
+  repeated string datas = 1;
+  int32 fromWorkerID = 3;
+}
+
+message ShuffleResponse {
+  int32 sendTerminate = 1;
+}
+
+message ShutdownWorkerServerRequest {
+  int32 workerID = 1;
+}
+
+message ShutdownWorkerServerResponse {
+  int32 shutdown = 1;
+}

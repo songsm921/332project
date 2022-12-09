@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package generalnet;
+
+service Generalnet {
+  rpc connect2Server (Connect2ServerRequest) returns (Connect2ServerResponse) {}
+  rpc sortEndMsg2Master (SortEndMsg2MasterRequest) returns (SortEndMsg2MasterResponse) {}
+  rpc samplingEndMsg2Master (SamplingEndMsg2MasterRequest) returns (SamplingEndMsg2MasterResponse) {}
+  rpc partitioningEndMsg2Master (PartitioningEndMsg2MasterRequest) returns (PartitioningEndMsg2MasterResponse) {}
+  rpc startShufflingMsg2Master (StartShufflingMsg2MasterRequest) returns (StartShufflingMsg2MasterResponse) {}
+  rpc mergeSortEndMsg2Master (MergeSortEndMsg2MasterRequest) returns (MergeSortEndMsg2MasterResponse) {}
+  rpc taskDoneMsg2Master (TaskDoneMsg2MasterRequest) returns (TaskDoneMsg2MasterResponse) {}
+}
+
+message Connect2ServerRequest {
+  string workerIpAddress = 1;
+}
+
+message Connect2ServerResponse {
+  int32 workerID = 1;
+  int32 workerNum = 3;
+  repeated string workerIPList = 2;
+}
+
+message SortEndMsg2MasterRequest {
+  int32 workerID = 1;
+}
+
+message SortEndMsg2MasterResponse {
+  int32 startNext = 1;
+}
+
+message SamplingEndMsg2MasterRequest {
+  int32 workerID = 1;
+  repeated string samples = 2;
+}
+
+message SamplingEndMsg2MasterResponse {
+  repeated string totalSamples = 1;
+}
+
+message PartitioningEndMsg2MasterRequest {
+  int32 workerID = 1;
+}
+
+message PartitioningEndMsg2MasterResponse {
+  int32 startNext = 1;
+}
+
+message StartShufflingMsg2MasterRequest {
+  int32 workerID = 1;
+}
+
+message StartShufflingMsg2MasterResponse {
+  int32 nextServerWorkerID  = 1;
+}
+
+message MergeSortEndMsg2MasterRequest {
+  int32 workerID = 1;
+}
+
+message MergeSortEndMsg2MasterResponse {
+  int32 status = 1;
+}
+
+message TaskDoneMsg2MasterRequest {
+  int32 workerID = 1;
+}
+
+message TaskDoneMsg2MasterResponse {
+  int32 status = 1;
+}
